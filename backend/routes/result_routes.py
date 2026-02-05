@@ -1,9 +1,13 @@
 from flask import Blueprint, request, jsonify
 from config.database import get_db
+from utils.auth_middleware import token_required
+from utils.role_required import role_required
 
 result_bp = Blueprint("result", __name__)
 # Khai báo các routes liên quan đến kết quả ở đây
 @result_bp.route("/submit", methods=["POST"])
+@token_required
+@role_required("student")
 def submit_exam():
     data = request.json
     db = get_db()

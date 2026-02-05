@@ -1,9 +1,14 @@
 from flask import Blueprint, request, jsonify
 from config.database import get_db
+from utils.auth_middleware import token_required
+from utils.role_required import role_required
+
 
 exam_bp = Blueprint("exam", __name__)
 #API 1 – GIÁO VIÊN TẠO ĐỀ THI CHO LỚP
 @exam_bp.route("/create", methods=["POST"])
+@token_required
+@role_required("teacher")
 def create_exam():
     data = request.json
     db = get_db()

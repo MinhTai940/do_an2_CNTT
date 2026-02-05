@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify
 from config.database import get_db
+from utils.auth_middleware import token_required
+from utils.role_required import role_required
 import random
 import string
 
@@ -11,6 +13,8 @@ def generate_class_code(length=6):
 
 #API giáo viên
 @class_bp.route("/create", methods=["POST"])
+@token_required
+@role_required("teacher")
 def create_class():
     data = request.json
     db = get_db()
