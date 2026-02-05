@@ -6,6 +6,7 @@ from routes.class_routes import class_bp
 from routes.exam_routes import exam_bp
 from routes.question_routes import question_bp
 from routes.result_routes import result_bp
+from routes.cheat_routes import cheat_bp
 
 
 
@@ -18,6 +19,7 @@ app.register_blueprint(class_bp, url_prefix="/api/classes")
 app.register_blueprint(exam_bp, url_prefix="/api/exams")
 app.register_blueprint(question_bp, url_prefix="/api/questions")
 app.register_blueprint(result_bp, url_prefix="/api/results")
+app.register_blueprint(cheat_bp, url_prefix="/api/cheat")
 
 
 
