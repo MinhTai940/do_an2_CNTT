@@ -4,6 +4,9 @@ from flask_cors import CORS
 from routes.test_routes import test_bp
 from routes.class_routes import class_bp
 from routes.exam_routes import exam_bp
+from routes.question_routes import question_bp
+from routes.result_routes import result_bp
+
 
 
 app = Flask(__name__)
@@ -13,6 +16,9 @@ CORS(app)
 app.register_blueprint(test_bp, url_prefix="/api/test")
 app.register_blueprint(class_bp, url_prefix="/api/classes")
 app.register_blueprint(exam_bp, url_prefix="/api/exams")
+app.register_blueprint(question_bp, url_prefix="/api/questions")
+app.register_blueprint(result_bp, url_prefix="/api/results")
+
 
 
 if __name__ == "__main__":
