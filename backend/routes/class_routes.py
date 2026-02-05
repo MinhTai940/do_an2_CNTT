@@ -37,12 +37,14 @@ def create_class():
     }), 201
 #API học sinh
 @class_bp.route("/join", methods=["POST"])
+@token_required
+@role_required("student")
 def join_class():
     data = request.json
     db = get_db()
 
     class_code = data.get("class_code")
-    student_id = data.get("student_id")
+    student_id = request.user["user_id"]
 
     classroom = db.classes.find_one({"class_code": class_code})
 
@@ -56,9 +58,10 @@ def join_class():
 
     return jsonify({"message": "Joined class successfully"}), 200
 #AIP lấy danh sách lớp học của giáo viên
-@class_bp.route("/student/<student_id>", methods=["GET"])
-def get_student_classes(student_id):
+@class_bp.route("/student/me", methods=["GET"])
+def get_my_classes():
     db = get_db()
+    student_id = request.user["user_id"]
 
     memberships = db.class_members.find({"student_id": student_id})
     class_ids = [m["class_id"] for m in memberships]

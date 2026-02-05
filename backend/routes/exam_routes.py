@@ -17,7 +17,7 @@ def create_exam():
         "exam_name": data.get("exam_name"),
         "class_id": data.get("class_id"),
         "duration": data.get("duration"),   # phút
-        "teacher_id": data.get("teacher_id"),
+        "teacher_id": request.user["user_id"],
         "status": "active"
     }
 
@@ -28,6 +28,8 @@ def create_exam():
     }), 201
 #API 2 – HỌC SINH LẤY DANH SÁCH ĐỀ THI THEO LỚP
 @exam_bp.route("/class/<class_id>", methods=["GET"])
+@token_required
+@role_required("teacher")
 def get_exams_by_class(class_id):
     db = get_db()
 

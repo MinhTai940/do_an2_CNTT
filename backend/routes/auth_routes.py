@@ -22,7 +22,7 @@ def login():
     if not user:
         return jsonify({"message": "Invalid credentials"}), 401
 
-    token = generate_token(user)
+    token = generate_token(user)   # ✅ TRUYỀN NGUYÊN USER
 
     return jsonify({
         "token": token,

@@ -1,10 +1,14 @@
 from flask import Blueprint, request, jsonify
 from config.database import get_db
 from datetime import datetime
+from utils.auth_middleware import token_required
+from utils.role_required import role_required
 
 cheat_bp = Blueprint("cheat", __name__)
 # API GHI NHỚ HÀNH VI GIAN LẬN
 @cheat_bp.route("/log", methods=["POST"])
+@token_required
+@role_required("student")
 def log_cheat():
     data = request.json
     db = get_db()
@@ -23,6 +27,8 @@ def log_cheat():
     }), 201
 # API LẤY LOG GIAN LẬN THEO BÀI THI
 @cheat_bp.route("/exam/<exam_id>", methods=["GET"])
+@token_required
+@role_required("teacher")
 def get_cheat_logs(exam_id):
     db = get_db()
 
