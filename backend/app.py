@@ -8,6 +8,7 @@ from routes.question_routes import question_bp
 from routes.result_routes import result_bp
 from routes.cheat_routes import cheat_bp
 from routes.report_routes import report_bp
+from routes.auth_routes import auth_bp
 
 
 
@@ -22,6 +23,8 @@ app.register_blueprint(question_bp, url_prefix="/api/questions")
 app.register_blueprint(result_bp, url_prefix="/api/results")
 app.register_blueprint(cheat_bp, url_prefix="/api/cheat")
 app.register_blueprint(report_bp, url_prefix="/api/reports")
+app.register_blueprint(auth_bp, url_prefix="/api/auth")
+
 
 
 
