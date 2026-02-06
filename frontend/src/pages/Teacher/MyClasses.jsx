@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import axiosClient from "../../api/axiosClient";
+import { useNavigate } from "react-router-dom";
 
 export default function MyClasses() {
   const [classes, setClasses] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axiosClient
@@ -19,7 +21,11 @@ export default function MyClasses() {
 
       <ul>
         {classes.map((c, i) => (
-          <li key={i}>
+          <li
+            key={i}
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate(`/teacher/classes/${c.class_code}`)}
+          >
             <b>{c.class_name}</b> – {c.subject}
           </li>
         ))}

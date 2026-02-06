@@ -9,6 +9,10 @@ import MyClasses from "./pages/Student/MyClasses";
 // Teacher pages
 import CreateClass from "./pages/Teacher/CreateClass";
 import MyTeacherClasses from "./pages/Teacher/MyClasses";
+import ClassDetail from "./pages/Teacher/ClassDetail";
+import CreateExam from "./pages/Teacher/CreateExam";
+
+
 
 
 function App() {
@@ -55,7 +59,22 @@ function App() {
        </ProtectedRoute>
          }
         />
-
+        <Route
+         path="/teacher/classes/:classCode"
+        element={
+        <ProtectedRoute role="teacher">
+        <ClassDetail />
+      </ProtectedRoute>
+      }
+      />
+      <Route
+      path="/teacher/classes/:classCode/create-exam"
+      element={
+      <ProtectedRoute role="teacher">
+      <CreateExam />
+      </ProtectedRoute>
+      }
+      />
       </Routes>
     </BrowserRouter>
   );

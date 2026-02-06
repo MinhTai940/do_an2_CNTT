@@ -13,7 +13,7 @@ from routes.auth_routes import auth_bp
 
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app)
 
 # đăng ký routes
 app.register_blueprint(test_bp, url_prefix="/api/test")
