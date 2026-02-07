@@ -8,9 +8,10 @@ SECRET_KEY = os.getenv("SECRET_KEY", "secret123")
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
+        if request.method == "OPTIONS":
+            return f(*args, **kwargs)
         token = None
 
-        # Lấy token từ header
         if "Authorization" in request.headers:
             token = request.headers["Authorization"]
             if token.startswith("Bearer "):
@@ -21,12 +22,11 @@ def token_required(f):
 
         try:
             data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-            request.user = data   # lưu thông tin user
+            request.user = data
         except jwt.ExpiredSignatureError:
             return jsonify({"message": "Token expired"}), 401
         except jwt.InvalidTokenError:
             return jsonify({"message": "Invalid token"}), 401
 
         return f(*args, **kwargs)
-
     return decorated

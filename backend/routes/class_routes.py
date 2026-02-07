@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from config.database import get_db
 from utils.auth_middleware import token_required
 from utils.role_required import role_required
+from bson import ObjectId
 import random
 import string
 
@@ -22,11 +23,11 @@ def create_class():
     class_code = generate_class_code()
 
     new_class = {
-        "class_name": data.get("class_name"),
-        "subject": data.get("subject"),
-        "teacher_id": data.get("teacher_id"),
-        "class_code": class_code,
-        "status": "active"
+    "class_name": data.get("class_name"),
+    "subject": data.get("subject"),
+    "teacher_id": request.user["user_id"],  # ✅ LẤY TỪ TOKEN
+    "class_code": class_code,
+    "status": "active"
     }
 
     db.classes.insert_one(new_class)
@@ -52,23 +53,30 @@ def join_class():
         return jsonify({"message": "Invalid class code"}), 404
 
     db.class_members.insert_one({
-        "class_id": str(classroom["_id"]),
-        "student_id": student_id
-    })
+    "class_id": classroom["_id"],   # ✅ ObjectId
+    "student_id": student_id
+})
 
     return jsonify({"message": "Joined class successfully"}), 200
 #AIP lấy danh sách lớp học của giáo viên
 @class_bp.route("/student/me", methods=["GET"])
 @token_required
 @role_required("student")
-def get_my_classes():
+def get_my_classes_student():
     db = get_db()
     student_id = request.user["user_id"]
 
-    memberships = db.class_members.find({"student_id": student_id})
-    class_ids = [m["class_id"] for m in memberships]
+    memberships = list(db.class_members.find({"student_id": student_id}))
 
-    classes = list(db.classes.find({"_id": {"$in": class_ids}}, {"_id": 0}))
+    class_ids = [m["class_id"] for m in memberships]  # ObjectId
+
+    classes = list(db.classes.find(
+        {"_id": {"$in": class_ids}},
+        {"class_name": 1, "subject": 1}
+    ))
+
+    for c in classes:
+        c["_id"] = str(c["_id"])
 
     return jsonify(classes), 200
 # API LẤY DANH SÁCH LỚP CỦA GIÁO VIÊN (🔥 BỊ THIẾU)
@@ -80,9 +88,11 @@ def get_my_classes_teacher():
     teacher_id = request.user["user_id"]
 
     classes = list(db.classes.find(
-        {"teacher_id": teacher_id},
-        {"_id": 0}
+        {"teacher_id": teacher_id}
     ))
+
+    for c in classes:
+        c["_id"] = str(c["_id"]) 
 
     return jsonify(classes), 200
 

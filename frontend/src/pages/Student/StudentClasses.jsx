@@ -1,30 +1,32 @@
 import { useEffect, useState } from "react";
-import axiosClient from "../../api/axiosClient";
 import { useNavigate } from "react-router-dom";
+import axiosClient from "../../api/axiosClient";
 
-export default function MyClasses() {
+export default function StudentClasses() {
   const [classes, setClasses] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     axiosClient
-      .get("/classes/teacher/me")
+      .get("/classes/student/me")
       .then(res => setClasses(res.data))
       .catch(() => alert("Không tải được lớp"));
   }, []);
 
   return (
     <div>
-      <h2>Lớp tôi phụ trách</h2>
+      <h2>Lớp tôi tham gia</h2>
 
-      {classes.length === 0 && <p>Chưa tạo lớp nào</p>}
+      {classes.length === 0 && <p>Chưa tham gia lớp nào</p>}
 
       <ul>
-        {classes.map((c, i) => (
+        {classes.map(c => (
           <li key={c._id}>
             <b>{c.class_name}</b> – {c.subject}
             <br />
-            <a href={`/teacher/classes/${c._id}`}>Chi tiết</a>
+            <button onClick={() => navigate(`/student/classes/${c._id}`)}>
+              Xem đề thi
+            </button>
           </li>
         ))}
       </ul>

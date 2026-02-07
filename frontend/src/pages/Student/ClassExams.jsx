@@ -2,39 +2,37 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosClient from "../../api/axiosClient";
 
-export default function ClassDetail() {
+export default function ClassExams() {
   const { classId } = useParams();
   const navigate = useNavigate();
   const [exams, setExams] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axiosClient
-      .get(`/exams/teacher/class/${classId}`)
+      .get(`/exams/student/class/${classId}`)
       .then(res => setExams(res.data))
-      .catch(() => alert("Không tải được đề thi"));
+      .catch(() => alert("Không tải được đề thi"))
+      .finally(() => setLoading(false));
   }, [classId]);
 
   return (
     <div>
-      <h2>Chi tiết lớp</h2>
+      <h2>Danh sách đề thi</h2>
 
-      <button onClick={() => navigate(`/teacher/create-exam/${classId}`)}>
-        ➕ Tạo đề thi
-      </button>
+      {loading && <p>Đang tải...</p>}
 
-      <h3>Danh sách đề thi</h3>
-
-      {exams.length === 0 && <p>Chưa có đề thi</p>}
+      {!loading && exams.length === 0 && (
+        <p>Chưa có đề thi</p>
+      )}
 
       <ul>
-        {exams.map((e) => (
+        {exams.map(e => (
           <li key={e._id}>
             <b>{e.exam_name}</b> – {e.duration} phút
             <br />
-            <button
-              onClick={() => navigate(`/teacher/exams/${e._id}`)}
-            >
-              📄 Quản lý câu hỏi
+            <button onClick={() => navigate(`/student/exams/${e._id}`)}>
+              📝 Làm bài
             </button>
           </li>
         ))}

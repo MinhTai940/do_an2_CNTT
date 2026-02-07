@@ -1,41 +1,37 @@
 import { useState } from "react";
 import axiosClient from "../../api/axiosClient";
+import { useNavigate } from "react-router-dom";
 
 export default function JoinClass() {
   const [classCode, setClassCode] = useState("");
-  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleJoin = async () => {
     try {
-      const res = await axiosClient.post("/classes/join", {
+      await axiosClient.post("/classes/join", {
         class_code: classCode,
       });
 
-      setMessage("✅ Join class successfully");
+      alert("Join class successfully");
+
+      // ✅ chuyển sang trang lớp của tôi
+      navigate("/student/classes");
     } catch (err) {
-      if (err.response) {
-        setMessage("❌ " + err.response.data.message);
-      } else {
-        setMessage("❌ Server error");
-      }
+      alert("Join thất bại");
     }
   };
 
   return (
-    <div style={{ padding: 40 }}>
+    <div>
       <h2>Join Class</h2>
 
       <input
-        placeholder="Enter class code"
         value={classCode}
         onChange={(e) => setClassCode(e.target.value)}
+        placeholder="Nhập mã lớp"
       />
-      <br /><br />
 
       <button onClick={handleJoin}>Join</button>
-
-      <p>{message}</p>
     </div>
   );
 }
-

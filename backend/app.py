@@ -1,6 +1,10 @@
 from flask import Flask
 from flask_cors import CORS
 
+app = Flask(__name__)
+print("🔥🔥🔥 FLASK APP WITH CORS IS RUNNING 🔥🔥🔥")
+CORS(app)
+
 from routes.test_routes import test_bp
 from routes.class_routes import class_bp
 from routes.exam_routes import exam_bp
@@ -12,10 +16,9 @@ from routes.auth_routes import auth_bp
 
 
 
-app = Flask(__name__)
-CORS(app)
 
-# đăng ký routes
+
+
 app.register_blueprint(test_bp, url_prefix="/api/test")
 app.register_blueprint(class_bp, url_prefix="/api/classes")
 app.register_blueprint(exam_bp, url_prefix="/api/exams")
@@ -29,5 +32,5 @@ app.register_blueprint(auth_bp, url_prefix="/api/auth")
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
 

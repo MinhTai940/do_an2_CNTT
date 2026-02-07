@@ -11,24 +11,23 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    try {
-      const res = await axiosClient.post("/auth/login", {
-        username,
-        password,
-      });
+  try {
+    const res = await axiosClient.post("/auth/login", {
+      username,
+      password,
+    });
 
-      login(res.data.token, res.data.role);
+    login(res.data.token, res.data.role);
 
-      if (res.data.role === "student") {
-        navigate("/student/join");
-      } else if (res.data.role === "teacher") {
-        navigate("/teacher/create-class");
-      }
-
-    } catch (err) {
-      alert("Login failed");
+    if (res.data.role === "teacher") {
+      navigate("/teacher/dashboard");
+    } else {
+      navigate("/student/dashboard");
     }
-  };
+  } catch (err) {
+    alert("Login failed");
+  }
+};
 
   return (
     <div style={{ padding: 40 }}>
