@@ -1,9 +1,10 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axiosClient from "../../api/axiosClient";
 
 export default function ExamReport() {
   const { examId } = useParams();
+  const navigate = useNavigate();   // 👈 THÊM DÒNG NÀY
   const [summary, setSummary] = useState(null);
   const [results, setResults] = useState([]);
 
@@ -21,7 +22,20 @@ export default function ExamReport() {
   return (
     <div style={{ padding: 20 }}>
       <h2>📊 Thống kê đề thi</h2>
-
+      <button
+      style={{
+        background: "#dc2626",
+        color: "#fff",
+        padding: "6px 12px",
+        border: "none",
+        borderRadius: 4,
+        cursor: "pointer",
+        marginBottom: 10
+      }}
+      onClick={() => navigate(`/teacher/exams/${examId}/cheat`)}
+    >
+      🚨 Xem gian lận
+    </button>
       <p>👨‍🎓 Số học sinh làm bài: {summary.total_students}</p>
 
       <h3>Kết quả chi tiết</h3>
@@ -36,7 +50,11 @@ export default function ExamReport() {
         <tbody>
           {results.map((r, i) => (
             <tr key={i}>
-              <td>{r.student_id}</td>
+              <td>
+              <b>{r.student_name}</b>
+              <br />
+              <small>{r.student_code}</small>
+              </td>
               <td>{r.score}</td>
             </tr>
           ))}

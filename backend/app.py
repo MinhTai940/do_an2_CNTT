@@ -3,7 +3,11 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 print("🔥🔥🔥 FLASK APP WITH CORS IS RUNNING 🔥🔥🔥")
-CORS(app)
+CORS(
+    app,
+    resources={r"/api/*": {"origins": "http://localhost:3000"}},
+    supports_credentials=True
+)
 
 from routes.test_routes import test_bp
 from routes.class_routes import class_bp
@@ -13,6 +17,11 @@ from routes.result_routes import result_bp
 from routes.cheat_routes import cheat_bp
 from routes.report_routes import report_bp
 from routes.auth_routes import auth_bp
+from routes.admin_routes import admin_bp
+from routes.student_routes import student_bp
+from routes.teacher_routes import teacher_bp
+
+
 
 
 
@@ -27,6 +36,11 @@ app.register_blueprint(result_bp, url_prefix="/api/results")
 app.register_blueprint(cheat_bp, url_prefix="/api/cheat")
 app.register_blueprint(report_bp, url_prefix="/api/reports")
 app.register_blueprint(auth_bp, url_prefix="/api/auth")
+app.register_blueprint(admin_bp, url_prefix="/api/admin")
+app.register_blueprint(student_bp, url_prefix="/api/student")
+app.register_blueprint(teacher_bp, url_prefix="/api/teacher")
+
+
 
 
 

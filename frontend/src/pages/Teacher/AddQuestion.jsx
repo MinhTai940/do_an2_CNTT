@@ -21,7 +21,7 @@ export default function AddQuestion() {
       exam_id: examId,
       content,
       options,
-      correct_answer: correct,
+      correct_index: correct,
       level
     });
 
